@@ -1,0 +1,16 @@
+frontik/testing only:
+
+	git clone https://github.com/hhru/frontik.git frontik-testing
+	cd frontik-testing/
+	git filter-branch --prune-empty --subdirectory-filter frontik/testing
+
+
+without frontik/testing:
+
+	git clone https://github.com/hhru/frontik.git frontik-del-testing
+	cd frontik-del-testing/
+	git filter-branch --index-filter "git rm -r --cached --ignore-unmatch frontik/testing/" --prune-empty
+	git for-each-ref --format="%(refname)" refs/original/ | xargs -n 1 git update-ref -d
+	rm -Rf .git/logs .git/refs/original
+	git gc --prune=all --aggressive
+
